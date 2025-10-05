@@ -1,0 +1,12 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. NOPARAMSUB.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 SUB-MESSAGE PIC X(30) VALUE "No parameter subprogram".
+
+       PROCEDURE DIVISION.
+           DISPLAY "=== NOPARAMSUB START ==="
+           DISPLAY SUB-MESSAGE
+           DISPLAY "=== NOPARAMSUB END ==="
+           EXIT PROGRAM.

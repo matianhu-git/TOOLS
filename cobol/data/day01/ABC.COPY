@@ -1,0 +1,3 @@
+       01 WS-DESCRIPTION.
+          05 WS-NUMCOPY.
+             10 WS-NUMCOPYSUB PIC 9(2) VALUE 20.

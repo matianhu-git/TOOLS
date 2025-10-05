@@ -1,0 +1,23 @@
+https://launchpad.net/cobcide/+download
+
+配置环境变量
+C:\Program Files (x86)\OpenCobolIDE\GnuCOBOL\bin
+
+在 PowerShell 中运行以下命令：
+# 设置正确的配置路径
+$env:COB_CONFIG_DIR = "C:\Program Files (x86)\OpenCobolIDE\GnuCOBOL\config"
+$env:COB_COPY_DIR = "C:\Program Files (x86)\OpenCobolIDE\GnuCOBOL\copy"
+
+# 永久设置环境变量
+[System.Environment]::SetEnvironmentVariable("COB_CONFIG_DIR", "C:\Program Files (x86)\OpenCobolIDE\GnuCOBOL\config", "User")
+[System.Environment]::SetEnvironmentVariable("COB_COPY_DIR", "C:\Program Files (x86)\OpenCobolIDE\GnuCOBOL\copy", "User")
+
+
+# 以管理员身份运行 PowerShell，然后执行：
+[Environment]::SetEnvironmentVariable("COB_CONFIG_DIR", "C:\Program Files (x86)\OpenCobolIDE\GnuCOBOL\config", "Machine")
+[Environment]::SetEnvironmentVariable("COB_COPY_DIR", "C:\Program Files (x86)\OpenCobolIDE\GnuCOBOL\copy", "Machine")
+
+
+cobc --version
+
+cobc -x -o bin\demo01.exe demo01.cbl	
