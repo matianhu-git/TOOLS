@@ -6,18 +6,55 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class TableDefFileGenerator {
+	
+	// Oracle データベース接続情報（自分の環境に合わせて変更してください）
+	private static String url = "jdbc:oracle:thin:@localhost:1521:XE";  // XE は Oracle Express Edition の例
+	private static String user = "HR";                                 // ユーザー名（スキーマ名）
+	private static String password = "your_password";                  // パスワード
+	
+	 // 「テーブル検索」ボタンが押された時の処理
+    private static String onSearchTableNames() {
+        
+        // Oracle用SQL
+        //   USER_TABLES：現在ログインしているユーザーのテーブル一覧
+        //   ALL_TABLES ：指定したスキーマのテーブル一覧（owner指定が必要）
+        String sql =
+            "SELECT table_name " +
+            "FROM all_tables " +
+            "WHERE owner = ?";
 
+        StringBuilder sb = new StringBuilder();
+
+        // try-with-resources：自動でクローズされる
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // スキーマ名を指定（Oracleでは通常大文字）
+            stmt.setString(1, user.toUpperCase());
+
+            // SQLを実行し、結果を取得
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    // テーブル名を1行ずつ追加
+                    sb.append(rs.getString("table_name")).append(",");
+                }
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return sb.toString();
+    }
+    
     public static void tabletToDefFile() {
-        // Oracle JDBC 接続情報
-        String url = "jdbc:oracle:thin:@localhost:1521:ORCL"; // 実際の接続情報に変更
-        String user = "YOUR_USERNAME";
-        String password = "YOUR_PASSWORD";
 
         // テーブル名リスト（改行や入力フォームから取得してもOK）
-        String[] tableNames = {"EMPLOYEES", "DEPARTMENTS"};
+        String[] tableNames = onSearchTableNames().split(",");
 
         // 出力ファイルパス
         String filePath = "dbdef.dft";
